@@ -18,6 +18,14 @@ The generations are powered by the [Mixfont](https://www.mixfont.com) AI font ge
 
 ![AI Font Assistant](https://static.mixfont.com/assets/20260615-224854-glyphs1_3_v1-o9l5ajgo.webp)
 
+![AI Font Assistant window in Glyphs 3](https://static.mixfont.com/assets/20260615-214416-image_v1-1-84nuiheu.webp)
+
+![AI Font Assistant plugin in Glyphs 3](https://static.mixfont.com/assets/20260615-221628-image_v2-7lms1af5.webp)
+
+![AI Font Assistant generate controls](https://static.mixfont.com/assets/20260615-213835-glyphs1_v1-1-m1uk134d.webp)
+
+## Demo Video
+
 <p align="center">
   <a href="https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4">
     <img src="https://static.mixfont.com/assets/20260615-222542-glyphs_v1-15ff5wer.webp" alt="Watch the AI Font Assistant demo">
@@ -25,12 +33,6 @@ The generations are powered by the [Mixfont](https://www.mixfont.com) AI font ge
   <br>
   <a href="https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4">Watch the demo video</a>
 </p>
-
-![AI Font Assistant window in Glyphs 3](https://static.mixfont.com/assets/20260615-214416-image_v1-1-84nuiheu.webp)
-
-![AI Font Assistant plugin in Glyphs 3](https://static.mixfont.com/assets/20260615-221628-image_v2-7lms1af5.webp)
-
-![AI Font Assistant generate controls](https://static.mixfont.com/assets/20260615-213835-glyphs1_v1-1-m1uk134d.webp)
 
 ## Requirements
 
@@ -65,3 +67,5 @@ See [LICENSE](LICENSE) for full terms.
 Mixfont is frontier research lab dedicated to making font creation easier and more accessible for everyone.
 
 Website: [mixfont.com](https://www.mixfont.com)
+
+GitHub: [mixfont/ai-font-assistant](https://github.com/mixfont/ai-font-assistant)
