@@ -9,6 +9,14 @@ Mixfont, then opens the returned TTF as a new Glyphs document.
 The plugin signs in with a Mixfont account in the browser. Generations spend
 the team plan's web credits.
 
+## Screenshots
+
+![AI Font Assistant plugin in Glyphs 3](https://static.mixfont.com/assets/20260615-212115-glyphs-screenshot-6d4wmkem.webp)
+
+![AI Font Assistant generate controls](https://static.mixfont.com/assets/20260615-213835-glyphs1_v1-1-m1uk134d.webp)
+
+![AI Font Assistant window in Glyphs 3](https://static.mixfont.com/assets/20260615-214416-image_v1-1-84nuiheu.webp)
+
 ## How it works
 
 1. **Connect account**: the plugin opens Mixfont sign-in in the browser and

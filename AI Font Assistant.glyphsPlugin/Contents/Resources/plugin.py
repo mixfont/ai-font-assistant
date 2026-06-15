@@ -25,9 +25,7 @@ import tempfile
 import threading
 import time
 import traceback
-import urllib.error
 import urllib.parse
-import urllib.request
 import uuid
 
 import objc
@@ -43,7 +41,13 @@ from AppKit import (
 	NSMenuItem,
 	NSWorkspace,
 )
-from Foundation import NSURL
+from Foundation import (
+	NSData,
+	NSMutableURLRequest,
+	NSURLConnection,
+	NSURL,
+	NSURLRequestReloadIgnoringLocalCacheData,
+)
 from GlyphsApp import Glyphs, GLYPH_MENU, Message
 from GlyphsApp.plugins import GeneralPlugin
 
@@ -1018,54 +1022,113 @@ class MixfontPlugin(GeneralPlugin):
 
 	@objc.python_method
 	def fetchJson(self, method, url, token=None, body=None, contentType=None):
-		headers = {
-			"Accept": "application/json",
-			"User-Agent": USER_AGENT,
-		}
-		if token:
-			headers["Authorization"] = "Bearer %s" % token
-		if contentType:
-			headers["Content-Type"] = contentType
-		request = urllib.request.Request(url, data=body, headers=headers, method=method)
-		try:
-			with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-				payload = response.read()
-		except urllib.error.HTTPError as error:
-			if error.code == 401 and token:
-				raise MixfontAuthError("Your Mixfont connection expired. Connect your account again.")
-			raise MixfontApiError(self.readHttpErrorMessage(error))
-		except urllib.error.URLError as error:
-			raise MixfontApiError("Could not reach Mixfont (%s)." % getattr(error, "reason", error))
+		statusCode, payload = self.requestBytes(
+			method,
+			url,
+			token=token,
+			body=body,
+			contentType=contentType,
+			timeout=REQUEST_TIMEOUT_SECONDS,
+			accept="application/json",
+		)
+		if statusCode == 401 and token:
+			raise MixfontAuthError("Your Mixfont connection expired. Connect your account again.")
+		if statusCode >= 400:
+			raise MixfontApiError(self.readHttpErrorMessage(statusCode, payload))
 		try:
 			return json.loads(payload.decode("utf-8"))
 		except ValueError:
 			raise MixfontApiError("The Mixfont API returned an unexpected response.")
 
 	@objc.python_method
-	def readHttpErrorMessage(self, error):
+	def requestBytes(self, method, url, token=None, body=None, contentType=None, timeout=REQUEST_TIMEOUT_SECONDS, accept=None):
+		headers = {
+			"User-Agent": USER_AGENT,
+		}
+		if accept:
+			headers["Accept"] = accept
+		if token:
+			headers["Authorization"] = "Bearer %s" % token
+		if contentType:
+			headers["Content-Type"] = contentType
+
+		requestUrl = NSURL.URLWithString_(url)
+		if requestUrl is None:
+			raise MixfontApiError("The Mixfont API URL is invalid.")
+
+		request = NSMutableURLRequest.requestWithURL_cachePolicy_timeoutInterval_(
+			requestUrl,
+			NSURLRequestReloadIgnoringLocalCacheData,
+			float(timeout),
+		)
+		request.setHTTPMethod_(method)
+		for fieldName, fieldValue in headers.items():
+			request.setValue_forHTTPHeaderField_(fieldValue, fieldName)
+		if body is not None:
+			request.setHTTPBody_(NSData.dataWithBytes_length_(body, len(body)))
+
+		try:
+			result = NSURLConnection.sendSynchronousRequest_returningResponse_error_(request, None, None)
+		except Exception as error:
+			raise MixfontApiError("Could not reach Mixfont (%s)." % error)
+
+		if isinstance(result, tuple):
+			if len(result) == 3:
+				data, response, error = result
+			elif len(result) == 2:
+				data, response = result
+				error = None
+			else:
+				data = result[0] if result else None
+				response = None
+				error = None
+		else:
+			data = result
+			response = None
+			error = None
+
+		if error is not None:
+			try:
+				message = error.localizedDescription()
+			except Exception:
+				message = str(error)
+			raise MixfontApiError("Could not reach Mixfont (%s)." % message)
+
+		statusCode = 200
+		try:
+			statusCode = int(response.statusCode())
+		except Exception:
+			pass
+		payload = self.nsdataToBytes(data) if data is not None else b""
+		return statusCode, payload
+
+	@objc.python_method
+	def readHttpErrorMessage(self, statusCode, payload):
 		message = ""
 		try:
-			payload = json.loads(error.read().decode("utf-8"))
-			message = str(payload.get("error") or "")
+			body = json.loads(payload.decode("utf-8"))
+			message = str(body.get("error") or "")
 		except Exception:
 			message = ""
-		if error.code == 402:
+		if statusCode == 402:
 			return message or "Not enough credits for this generation."
-		if error.code == 429:
+		if statusCode == 429:
 			return message or "Your team has reached its font generation limit."
-		return message or ("The Mixfont API returned HTTP %i." % error.code)
+		return message or ("The Mixfont API returned HTTP %i." % statusCode)
 
 	@objc.python_method
 	def downloadTtf(self, ttfUrl, jobId, token=None, fontName=None):
-		headers = {"User-Agent": USER_AGENT}
-		if token:
-			headers["Authorization"] = "Bearer %s" % token
-		request = urllib.request.Request(ttfUrl, headers=headers)
-		try:
-			with urllib.request.urlopen(request, timeout=DOWNLOAD_TIMEOUT_SECONDS) as response:
-				data = response.read()
-		except (urllib.error.HTTPError, urllib.error.URLError) as error:
-			raise MixfontApiError("Could not download the generated font (%s)." % error)
+		statusCode, data = self.requestBytes(
+			"GET",
+			ttfUrl,
+			token=token,
+			timeout=DOWNLOAD_TIMEOUT_SECONDS,
+			accept="font/ttf, application/octet-stream",
+		)
+		if statusCode == 401 and token:
+			raise MixfontAuthError("Your Mixfont connection expired. Connect your account again.")
+		if statusCode >= 400:
+			raise MixfontApiError(self.readHttpErrorMessage(statusCode, data))
 		if not data:
 			raise MixfontApiError("The downloaded font file was empty.")
 		path = os.path.join(tempfile.gettempdir(), "%s.ttf" % self.safeFileName(fontName or jobId))
