@@ -4,7 +4,7 @@
 
 Developed by Eric Lu / [Mixfont](https://www.mixfont.com).
 
-<video src="https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4" poster="https://static.mixfont.com/assets/20260615-222542-glyphs_v1-15ff5wer.webp" controls width="100%"></video>
+![AI Font Assistant demo](https://static.mixfont.com/assets/20260615-224346-glyphs1_2_v1-6xm66uw8.webp)
 
 ---
 
@@ -17,6 +17,10 @@ There are two generation options: a standard generation that creates 72 basic En
 The generations are powered by the [Mixfont](https://www.mixfont.com) AI font generation model. Inputs are not used for AI training, but an internet connection and Mixfont credits are required to use the plugin. Users can start generating for free.
 
 ## Screenshots and Examples
+
+[![Watch the AI Font Assistant demo](https://static.mixfont.com/assets/20260615-222542-glyphs_v1-15ff5wer.webp)](https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4)
+
+[Watch the demo video](https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4)
 
 ![AI Font Assistant window in Glyphs 3](https://static.mixfont.com/assets/20260615-214416-image_v1-1-84nuiheu.webp)
 
