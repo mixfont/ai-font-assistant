@@ -6,8 +6,6 @@ Developed by Eric Lu / [Mixfont](https://www.mixfont.com).
 
 ![AI Font Assistant demo](https://static.mixfont.com/assets/20260615-224346-glyphs1_2_v1-6xm66uw8.webp)
 
----
-
 ## Overview
 
 The AI Font Assistant plugin for Glyphs 3 generates a complete typeface from a few drawn letter glyphs. It uses any glyphs in your current project as a style reference, and will create a complete set of Latin glyphs that match the style of your base typeface. The generated font is returned as a new Glyphs document, so your original file remains unchanged.
@@ -18,9 +16,15 @@ The generations are powered by the [Mixfont](https://www.mixfont.com) AI font ge
 
 ## Screenshots and Examples
 
-[![Watch the AI Font Assistant demo](https://static.mixfont.com/assets/20260615-222542-glyphs_v1-15ff5wer.webp)](https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4)
+![AI Font Assistant](https://static.mixfont.com/assets/20260615-224854-glyphs1_3_v1-o9l5ajgo.webp)
 
-[Watch the demo video](https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4)
+<p align="center">
+  <a href="https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4">
+    <img src="https://static.mixfont.com/assets/20260615-222542-glyphs_v1-15ff5wer.webp" alt="Watch the AI Font Assistant demo">
+  </a>
+  <br>
+  <a href="https://static.mixfont.com/assets/20260615-222319-glyphs-qhlqong5.mp4">Watch the demo video</a>
+</p>
 
 ![AI Font Assistant window in Glyphs 3](https://static.mixfont.com/assets/20260615-214416-image_v1-1-84nuiheu.webp)
 
